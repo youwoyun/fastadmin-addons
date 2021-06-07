@@ -1,10 +1,14 @@
 {
-    "name": "karsonzhang/fastadmin-addons",
+    "name": "youwoyun/fastadmin-addons",
     "description": "addons package for fastadmin",
-    "homepage": "https://github.com/karsonzhang/fastadmin-addons",
+    "homepage": "https://github.com/youwoyun/fastadmin-addons",
     "license": "Apache-2.0",
-    "version": "1.2.11",
+    "version": "1.0.0",
     "authors": [
+        {
+          "name": "youwoyun",
+          "email": "youwoyun@gmail.com"
+        },
         {
             "name": "Karson",
             "email": "karson@fastadmin.net"
@@ -15,7 +19,7 @@
         }
     ],
     "support": {
-        "issues": "https://github.com/karsonzhang/fastadmin-addons/issues"
+        "issues": "https://github.com/youwoyun/fastadmin-addons/issues"
     },
     "require": {
         "php": ">=7.0.0",

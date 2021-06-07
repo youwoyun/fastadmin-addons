@@ -151,16 +151,18 @@ class Service
                 throw new Exception('Addon already exists');
             }
 
-            // 追加MD5和Data数据
-            $extend['md5'] = md5_file($tmpFile);
-            $extend['data'] = $zip->getArchiveComment();
-            $extend['unknownsources'] = config('app_debug') && config('fastadmin.unknownsources');
-            $extend['faversion'] = config('fastadmin.version');
+            if (config('fastadmin.api_url')) {
+                // 追加MD5和Data数据
+                $extend['md5'] = md5_file($tmpFile);
+                $extend['data'] = $zip->getArchiveComment();
+                $extend['unknownsources'] = config('app_debug') && config('fastadmin.unknownsources');
+                $extend['faversion'] = config('fastadmin.version');
 
-            $params = array_merge($config, $extend);
+                $params = array_merge($config, $extend);
 
-            // 压缩包验证、版本依赖判断
-            Service::valid($params);
+                // 压缩包验证、版本依赖判断
+                Service::valid($params);
+            }
 
             //创建插件目录
             @mkdir($newAddonDir, 0755, true);
