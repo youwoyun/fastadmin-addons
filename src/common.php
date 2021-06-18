@@ -296,15 +296,16 @@ function get_addon_info($name)
 /**
  * 获取插件类的配置数组
  * @param string $name 插件名
+ * @param string $file 文件名
  * @return array
  */
-function get_addon_fullconfig($name)
+function get_addon_fullconfig($name, $file = 'config')
 {
     $addon = get_addon_instance($name);
     if (!$addon) {
         return [];
     }
-    return $addon->getFullConfig($name);
+    return $addon->getFullConfig($name, $file);
 }
 
 /**

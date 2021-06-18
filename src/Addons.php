@@ -151,15 +151,16 @@ abstract class Addons
     /**
      * 获取完整配置列表
      * @param string $name
+     * @param string $file
      * @return array
      */
-    final public function getFullConfig($name = '')
+    final public function getFullConfig($name = '', $file = 'config')
     {
         $fullConfigArr = [];
         if (empty($name)) {
             $name = $this->getName();
         }
-        $configFile = $this->addonPath . 'config.php';
+        $configFile = $this->addonPath . $file . '.php';
         if (is_file($configFile)) {
             $fullConfigArr = include $configFile;
         }
