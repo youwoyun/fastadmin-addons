@@ -3,7 +3,7 @@
     "description": "addons package for fastadmin",
     "homepage": "https://github.com/youwoyun/fastadmin-addons",
     "license": "Apache-2.0",
-    "version": "1.0.0",
+    "version": "1.0.1",
     "authors": [
         {
           "name": "youwoyun",
