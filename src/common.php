@@ -509,3 +509,17 @@ function set_addon_fullconfig($name, $array)
     }
     return true;
 }
+
+/**
+ * 复制配置文件
+ *
+ * @param string $name 插件名
+ */
+function copy_addon_config_file($name)
+{
+    $addonDir = ADDON_PATH . $name . DS;
+    $source = $addonDir . 'config_default.php';
+    if (is_file($source)) {
+        @copy($source, $addonDir . 'config.php');
+    }
+}

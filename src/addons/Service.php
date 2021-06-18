@@ -177,6 +177,9 @@ class Service
 
             Db::startTrans();
             try {
+                // 复制配置文件
+                copy_addon_config_file($name);
+
                 //默认禁用该插件
                 $info = get_addon_info($name);
                 if ($info['state']) {
@@ -440,6 +443,10 @@ EOD;
 
         Db::startTrans();
         try {
+            // 复制配置文件
+            copy_addon_config_file($name);
+
+            // 默认启用该插件
             if (!$info['state']) {
                 $info['state'] = 1;
                 set_addon_info($name, $info);
