@@ -163,6 +163,12 @@ abstract class Addons
         $configFile = $this->addonPath . $file . '.php';
         if (is_file($configFile)) {
             $fullConfigArr = include $configFile;
+        } else {
+            $configFile = $this->addonPath . $file . '_default.php';
+            if (is_file($configFile)) {
+                copy_addon_config_file($name);
+                $fullConfigArr = $this->getFullConfig($name, $file);
+            }
         }
         return $fullConfigArr;
     }
