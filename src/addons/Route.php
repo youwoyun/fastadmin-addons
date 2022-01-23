@@ -4,9 +4,11 @@ namespace think\addons;
 
 use think\Config;
 use think\exception\HttpException;
+use think\exception\HttpResponseException;
 use think\Hook;
 use think\Loader;
 use think\Request;
+use think\Response;
 
 /**
  * 插件执行默认控制器

@@ -1,12 +1,16 @@
 <?php
 
 use Symfony\Component\VarExporter\VarExporter;
+use think\addons\Service;
 use think\App;
 use think\Cache;
 use think\Config;
 use think\Exception;
+use think\exception\HttpException;
+use think\exception\HttpResponseException;
 use think\Hook;
 use think\Loader;
+use think\Response;
 use think\Route;
 
 // 插件目录
@@ -55,7 +59,11 @@ Hook::add('app_init', function () {
             $domain = $v['domain'];
             $drules = [];
             foreach ($v['rule'] as $m => $n) {
-                list($addon, $controller, $action) = explode('/', $n);
+                $urlArr = explode('/', $n);
+                if (count($urlArr) < 3) {
+                    continue;
+                }
+                list($addon, $controller, $action) = $urlArr;
                 $drules[$m] = sprintf($execute . '&indomain=1', $addon, $controller, $action);
             }
             //$domains[$domain] = $drules ? $drules : "\\addons\\{$k}\\controller";
@@ -65,7 +73,11 @@ Hook::add('app_init', function () {
             if (!$v) {
                 continue;
             }
-            list($addon, $controller, $action) = explode('/', $v);
+            $urlArr = explode('/', $v);
+            if (count($urlArr) < 3) {
+                continue;
+            }
+            list($addon, $controller, $action) = $urlArr;
             $rules[$k] = sprintf($execute, $addon, $controller, $action);
         }
     }
@@ -80,11 +92,8 @@ Hook::add('app_init', function () {
         $hooks = (array)Config::get('addons.hooks');
         // 初始化钩子
         foreach ($hooks as $key => $values) {
-            if (is_string($values)) {
-                $values = explode(',', $values);
-            } else {
-                $values = (array)$values;
-            }
+            $values = is_string($values) ? explode(',', $values) : (array)$values;
+            $values = array_filter($values);
             $hooks[$key] = array_filter(array_map('get_addon_class', $values));
         }
         Cache::set('hooks', $hooks);
@@ -394,8 +403,9 @@ function addon_url($url, $vars = [], $suffix = true, $domain = false)
     $val = "@addons/{$url}";
     $config = get_addon_config($addon);
     $dispatch = think\Request::instance()->dispatch();
-    $indomain = isset($dispatch['var']['indomain']) && $dispatch['var']['indomain'] ? true : false;
-    $domainprefix = $config && isset($config['domain']) && $config['domain'] ? $config['domain'] : '';
+    $indomain = isset($dispatch['var']['indomain']) && $dispatch['var']['indomain'] && $dispatch['var']['addon'] == $addon ? true : false;
+    //优先取插件配置中的domain，没有的情况下取全局的域名前缀配置
+    $domainprefix = $config && isset($config['domain']) && $config['domain'] ? $config['domain'] : Config::get('addons.domain');
     $domain = $domainprefix && Config::get('url_domain_deploy') ? $domainprefix : $domain;
     $rewrite = $config && isset($config['rewrite']) && $config['rewrite'] ? $config['rewrite'] : [];
     if ($rewrite) {
